@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/internal/jsonldtest"
 )
@@ -22,7 +22,7 @@ import (
 const defaultAlgorithm = "URDNA2015"
 
 func TestGetCanonicalDocument(t *testing.T) {
-	loader, err := jsonldtest.DocumentLoader(jld.ContextDocument{
+	loader, err := jsonldtest.DocumentLoader(context.Document{
 		URL:     "http://localhost:8652/dummy.jsonld",
 		Content: extraJSONLDContext,
 	})
@@ -207,7 +207,7 @@ func TestCompact(t *testing.T) {
 			"http://purl.org/dc/elements/1.1/title": "Title",
 		}
 
-		context := map[string]interface{}{
+		ctx := map[string]interface{}{
 			"@context": map[string]interface{}{
 				"dc": "http://purl.org/dc/elements/1.1/",
 				"ex": "http://example.org/vocab#",
@@ -217,7 +217,7 @@ func TestCompact(t *testing.T) {
 			},
 		}
 
-		compactedDoc, err := jsonld.Default().Compact(doc, context)
+		compactedDoc, err := jsonld.Default().Compact(doc, ctx)
 		if err != nil {
 			log.Println("Error when compacting JSON-LD document:", err)
 			return
@@ -345,7 +345,7 @@ func TestTransformBlankNodes(t *testing.T) {
 }
 
 func BenchmarkGetCanonicalDocument(b *testing.B) {
-	loader, err := jsonldtest.DocumentLoader(jld.ContextDocument{
+	loader, err := jsonldtest.DocumentLoader(context.Document{
 		URL:     "http://localhost:8652/dummy.jsonld",
 		Content: extraJSONLDContext,
 	})

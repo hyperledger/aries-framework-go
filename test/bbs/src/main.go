@@ -23,6 +23,7 @@ import (
 	"github.com/hyperledger/aries-framework-go/component/storageutil/mem"
 	bbs "github.com/hyperledger/aries-framework-go/pkg/crypto/primitive/bbs12381g2pub"
 	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite/bbsblssignature2020"
@@ -262,16 +263,16 @@ var (
 func createJSONLDDocumentLoader() (ld.DocumentLoader, error) {
 	loader, err := jld.NewDocumentLoader(mem.NewProvider(),
 		jld.WithExtraContexts(
-			jld.ContextDocument{
+			context.Document{
 				URL:         "https://w3id.org/citizenship/v1",
 				DocumentURL: "https://w3c-ccg.github.io/citizenship-vocab/contexts/citizenship-v1.jsonld",
 				Content:     citizenshipVocab,
 			},
-			jld.ContextDocument{
+			context.Document{
 				URL:     "https://www.w3.org/2018/credentials/examples/v1",
 				Content: credentialExamplesVocab,
 			},
-			jld.ContextDocument{
+			context.Document{
 				URL:     "https://www.w3.org/ns/odrl.jsonld",
 				Content: odrlVocab,
 			},

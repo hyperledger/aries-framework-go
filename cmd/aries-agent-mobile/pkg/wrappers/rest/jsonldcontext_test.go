@@ -15,7 +15,7 @@ import (
 
 	"github.com/hyperledger/aries-framework-go/cmd/aries-agent-mobile/pkg/wrappers/models"
 	"github.com/hyperledger/aries-framework-go/pkg/controller/rest/jsonld/context"
-	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	jsonldcontext "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 )
 
 const sampleContext = `{
@@ -61,9 +61,9 @@ func TestJSONLDContext_AddContext(t *testing.T) {
 		require.NoError(t, err)
 
 		payload := struct {
-			Documents []jsonld.ContextDocument `json:"documents"`
+			Documents []jsonldcontext.Document `json:"documents"`
 		}{
-			Documents: []jsonld.ContextDocument{
+			Documents: []jsonldcontext.Document{
 				{
 					URL:     "http://schema.org/name",
 					Content: contextJSON,

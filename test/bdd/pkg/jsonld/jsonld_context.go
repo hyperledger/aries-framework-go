@@ -9,7 +9,7 @@ package jsonld
 import (
 	_ "embed" //nolint:gci // required for go:embed
 
-	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 )
 
 // nolint:gochecknoglobals // embedded test contexts
@@ -21,8 +21,8 @@ var (
 )
 
 // Contexts returns JSON-LD contexts used in tests.
-func Contexts() []jld.ContextDocument {
-	return []jld.ContextDocument{
+func Contexts() []context.Document {
+	return []context.Document{
 		{
 			URL:     "https://www.w3.org/2018/credentials/examples/v1",
 			Content: credentialExamples,

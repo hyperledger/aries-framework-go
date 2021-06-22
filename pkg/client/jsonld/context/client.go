@@ -18,7 +18,7 @@ import (
 	"github.com/hyperledger/aries-framework-go/pkg/common/log"
 	cmd "github.com/hyperledger/aries-framework-go/pkg/controller/command/jsonld/context"
 	rest "github.com/hyperledger/aries-framework-go/pkg/controller/rest/jsonld/context"
-	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	jsonldcontext "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 )
 
 var logger = log.New("aries-framework/client/jsonld/context")
@@ -49,7 +49,7 @@ func NewClient(endpoint string, opts ...Option) *Client {
 }
 
 // Add adds JSON-LD context documents to the underlying storage.
-func (c *Client) Add(ctx context.Context, docs ...jsonld.ContextDocument) error {
+func (c *Client) Add(ctx context.Context, docs ...jsonldcontext.Document) error {
 	r := cmd.AddRequest{Documents: docs}
 
 	b, err := json.Marshal(r)

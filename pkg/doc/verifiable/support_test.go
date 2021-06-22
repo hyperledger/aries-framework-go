@@ -15,6 +15,7 @@ import (
 
 	"github.com/hyperledger/aries-framework-go/pkg/crypto/tinkcrypto"
 	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite/ed25519signature2018"
@@ -175,7 +176,7 @@ func newCryptoSigner(keyType kmsapi.KeyType) (signature.Signer, error) {
 	return signature.NewCryptoSigner(tinkCrypto, localKMS, keyType)
 }
 
-func createTestDocumentLoader(t *testing.T, extraContexts ...jld.ContextDocument) *jld.DocumentLoader {
+func createTestDocumentLoader(t *testing.T, extraContexts ...context.Document) *jld.DocumentLoader {
 	t.Helper()
 
 	loader, err := jsonldtest.DocumentLoader(extraContexts...)

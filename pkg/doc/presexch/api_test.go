@@ -18,6 +18,7 @@ import (
 
 	"github.com/hyperledger/aries-framework-go/component/storageutil/mem"
 	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	jsonldcontext "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	. "github.com/hyperledger/aries-framework-go/pkg/doc/presexch"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite"
@@ -443,7 +444,7 @@ func createTestDocumentLoader(t *testing.T, contextURL string) *jld.DocumentLoad
    }
 }`
 
-	loader, err := jsonldtest.DocumentLoader(jld.ContextDocument{
+	loader, err := jsonldtest.DocumentLoader(jsonldcontext.Document{
 		URL:     contextURL,
 		Content: []byte(jsonLDContext),
 	})
