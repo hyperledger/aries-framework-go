@@ -13,7 +13,7 @@ import (
 
 	"github.com/google/uuid"
 
-	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	. "github.com/hyperledger/aries-framework-go/pkg/doc/presexch"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/util"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/verifiable"
@@ -936,11 +936,11 @@ func ExamplePresentationDefinition_Match() {
 
 	// load json-ld context
 	loader, err := jsonldtest.DocumentLoader(
-		jld.ContextDocument{
+		context.Document{
 			URL:     "https://example.context.jsonld/account",
 			Content: []byte(exampleJSONLDContext),
 		},
-		jld.ContextDocument{
+		context.Document{
 			URL:     "https://example.context.jsonld/address",
 			Content: []byte(exampleJSONLDContext),
 		},

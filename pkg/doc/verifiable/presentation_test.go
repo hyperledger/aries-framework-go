@@ -13,7 +13,7 @@ import (
 	"github.com/piprate/json-gold/ld"
 	"github.com/stretchr/testify/require"
 
-	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite/ed25519signature2018"
@@ -142,7 +142,7 @@ func TestParsePresentation(t *testing.T) {
 			require.Len(t, descrMap, 2)
 		}
 
-		loader := createTestDocumentLoader(t, jld.ContextDocument{
+		loader := createTestDocumentLoader(t, context.Document{
 			URL:     "https://trustbloc.github.io/context/vc/presentation-exchange-submission-v1.jsonld",
 			Content: presentationSubmissionV1,
 		})

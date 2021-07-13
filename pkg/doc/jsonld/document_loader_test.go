@@ -16,6 +16,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
+	"github.com/hyperledger/aries-framework-go/pkg/internal/jsonldtest"
 	mockstorage "github.com/hyperledger/aries-framework-go/pkg/mock/storage"
 	"github.com/hyperledger/aries-framework-go/spi/storage"
 )
@@ -45,7 +47,7 @@ func TestNewDocumentLoader(t *testing.T) {
 		storageProvider := mockstorage.NewMockStoreProvider()
 
 		loader, err := jsonld.NewDocumentLoader(storageProvider,
-			jsonld.WithExtraContexts(jsonld.ContextDocument{URL: "url", Content: nil}))
+			jsonld.WithExtraContexts(context.Document{URL: "url", Content: nil}))
 
 		require.Nil(t, loader)
 		require.Error(t, err)
@@ -61,6 +63,20 @@ func TestNewDocumentLoader(t *testing.T) {
 		require.Nil(t, loader)
 		require.Error(t, err)
 		require.Contains(t, err.Error(), "store batch of contexts")
+	})
+
+	t.Run("Fail to get contexts from provider", func(t *testing.T) {
+		storageProvider := mockstorage.NewMockStoreProvider()
+
+		loader, err := jsonld.NewDocumentLoader(storageProvider, jsonld.WithContextProvider(
+			&mockContextProvider{
+				Error: errors.New("error"),
+			}),
+		)
+
+		require.Nil(t, loader)
+		require.Error(t, err)
+		require.Contains(t, err.Error(), "provider contexts: error")
 	})
 }
 
@@ -202,4 +218,16 @@ func (m *mockDocumentLoader) LoadDocument(string) (*ld.RemoteDocument, error) {
 		DocumentURL: "https://example.com/context.jsonld",
 		Document:    content,
 	}, nil
+}
+
+type mockContextProvider struct {
+	Error error
+}
+
+func (p *mockContextProvider) Contexts() ([]context.Document, error) {
+	if p.Error != nil {
+		return nil, p.Error
+	}
+
+	return jsonldtest.Contexts(), nil
 }

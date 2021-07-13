@@ -6,9 +6,9 @@ SPDX-License-Identifier: Apache-2.0
 
 package context
 
-import "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+import "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 
 // AddRequest is a request model for adding JSON-LD contexts.
 type AddRequest struct {
-	Documents []jsonld.ContextDocument `json:"documents"`
+	Documents []context.Document `json:"documents"`
 }

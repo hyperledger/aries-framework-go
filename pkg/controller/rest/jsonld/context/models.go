@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package context
 
-import "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+import "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 
 // addContextReq model
 //
@@ -15,5 +15,5 @@ import "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
 // swagger:parameters addContextReq
 type addContextReq struct { //nolint: unused,deadcode
 	// in: body
-	Documents []jsonld.ContextDocument `json:"documents"`
+	Documents []context.Document `json:"documents"`
 }

@@ -31,6 +31,7 @@ import (
 	"github.com/hyperledger/aries-framework-go/component/storageutil/mem"
 	"github.com/hyperledger/aries-framework-go/pkg/common/log"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/verifiable"
 	"github.com/hyperledger/aries-framework-go/pkg/kms"
 )
@@ -58,11 +59,11 @@ func main() {
 
 	loader, err = jsonld.NewDocumentLoader(mem.NewProvider(),
 		jsonld.WithExtraContexts(
-			jsonld.ContextDocument{
+			context.Document{
 				URL:     "https://www.w3.org/2018/credentials/examples/v1",
 				Content: credentialExamplesVocab,
 			},
-			jsonld.ContextDocument{
+			context.Document{
 				URL:     "https://www.w3.org/ns/odrl.jsonld",
 				Content: odrlVocab,
 			},

@@ -16,6 +16,7 @@ import (
 
 	"github.com/hyperledger/aries-framework-go/pkg/controller/command/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	jsonldcontext "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/internal/jsonldtest"
 	mockprovider "github.com/hyperledger/aries-framework-go/pkg/mock/provider"
 	mockstorage "github.com/hyperledger/aries-framework-go/pkg/mock/storage"
@@ -69,7 +70,7 @@ func TestCommand_Add(t *testing.T) {
 		cmd, err := context.New(newMockProvider(t))
 		require.NoError(t, err)
 
-		b, err := json.Marshal(context.AddRequest{Documents: []jsonld.ContextDocument{
+		b, err := json.Marshal(context.AddRequest{Documents: []jsonldcontext.Document{
 			{
 				URL:     "",
 				Content: jsonldtest.Contexts()[0].Content,
@@ -88,7 +89,7 @@ func TestCommand_Add(t *testing.T) {
 		cmd, err := context.New(newMockProvider(t))
 		require.NoError(t, err)
 
-		b, err := json.Marshal(context.AddRequest{Documents: []jsonld.ContextDocument{
+		b, err := json.Marshal(context.AddRequest{Documents: []jsonldcontext.Document{
 			{
 				URL:     "https://www.w3.org/2018/credentials/examples/v1",
 				Content: nil,

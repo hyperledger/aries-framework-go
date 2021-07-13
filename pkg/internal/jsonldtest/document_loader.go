@@ -15,6 +15,7 @@ import (
 
 	"github.com/hyperledger/aries-framework-go/component/storageutil/mem"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	jld "github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 )
 
@@ -30,7 +31,7 @@ var (
 	vcExamples []byte
 )
 
-var testContexts = []jsonld.ContextDocument{ //nolint:gochecknoglobals // embedded test contexts
+var testContexts = []context.Document{ //nolint:gochecknoglobals // embedded test contexts
 	{
 		URL:         "https://w3id.org/citizenship/v1",
 		DocumentURL: "https://w3c-ccg.github.io/citizenship-vocab/contexts/citizenship-v1.jsonld",
@@ -61,11 +62,11 @@ func WithDocumentLoader(t *testing.T) jld.ProcessorOpts {
 }
 
 // DocumentLoader returns JSON-LD document loader preloaded with embedded contexts and provided extra contexts.
-func DocumentLoader(extraContexts ...jsonld.ContextDocument) (*jsonld.DocumentLoader, error) {
+func DocumentLoader(extraContexts ...context.Document) (*jsonld.DocumentLoader, error) {
 	return createTestDocumentLoader(extraContexts...)
 }
 
-func createTestDocumentLoader(extraContexts ...jsonld.ContextDocument) (*jsonld.DocumentLoader, error) {
+func createTestDocumentLoader(extraContexts ...context.Document) (*jsonld.DocumentLoader, error) {
 	contexts := append(testContexts, extraContexts...)
 
 	loader, err := jsonld.NewDocumentLoader(mem.NewProvider(),
@@ -79,6 +80,6 @@ func createTestDocumentLoader(extraContexts ...jsonld.ContextDocument) (*jsonld.
 }
 
 // Contexts returns test JSON-LD contexts.
-func Contexts() []jsonld.ContextDocument {
+func Contexts() []context.Document {
 	return testContexts
 }

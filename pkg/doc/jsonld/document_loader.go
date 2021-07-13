@@ -14,6 +14,8 @@ import (
 
 	"github.com/piprate/json-gold/ld"
 
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context/embed"
 	"github.com/hyperledger/aries-framework-go/spi/storage"
 )
 
@@ -37,7 +39,9 @@ type DocumentLoader struct {
 // By default, missing contexts are not fetched from the remote URL. Use WithRemoteDocumentLoader() option
 // to specify a custom loader that can resolve context documents from the network.
 func NewDocumentLoader(storageProvider storage.Provider, opts ...DocumentLoaderOpts) (*DocumentLoader, error) {
-	options := &documentLoaderOpts{}
+	options := &documentLoaderOpts{
+		contextProviders: []context.Provider{&embed.Provider{}},
+	}
 
 	for i := range opts {
 		opts[i](options)
@@ -48,7 +52,18 @@ func NewDocumentLoader(storageProvider storage.Provider, opts ...DocumentLoaderO
 		return nil, fmt.Errorf("new document loader: %w", err)
 	}
 
-	contexts := append(embedContexts, options.extraContexts...)
+	var contexts []context.Document
+
+	for _, provider := range options.contextProviders {
+		c, er := provider.Contexts()
+		if er != nil {
+			return nil, fmt.Errorf("provider contexts: %w", er)
+		}
+
+		contexts = append(contexts, c...)
+	}
+
+	contexts = append(contexts, options.extraContexts...)
 
 	// preload context documents into the underlying storage
 	if err = save(store, contexts); err != nil {
@@ -61,7 +76,7 @@ func NewDocumentLoader(storageProvider storage.Provider, opts ...DocumentLoaderO
 	}, nil
 }
 
-func save(store storage.Store, docs []ContextDocument) error {
+func save(store storage.Store, docs []context.Document) error {
 	var ops []storage.Operation
 
 	for _, doc := range docs {
@@ -136,21 +151,15 @@ func (l *DocumentLoader) loadDocumentFromURL(u string) (*ld.RemoteDocument, erro
 
 type documentLoaderOpts struct {
 	remoteDocumentLoader ld.DocumentLoader
-	extraContexts        []ContextDocument
+	extraContexts        []context.Document
+	contextProviders     []context.Provider
 }
 
 // DocumentLoaderOpts configures DocumentLoader during creation.
 type DocumentLoaderOpts func(opts *documentLoaderOpts)
 
-// ContextDocument is a JSON-LD context document with associated metadata.
-type ContextDocument struct {
-	URL         string          `json:"url,omitempty"`         // URL is a context URL that shows up in the documents.
-	DocumentURL string          `json:"documentURL,omitempty"` // The final URL of the loaded context document.
-	Content     json.RawMessage `json:"content,omitempty"`     // Content of the context document.
-}
-
-// WithExtraContexts sets the extra contexts (in addition to embedded) for preloading into the underlying storage.
-func WithExtraContexts(contexts ...ContextDocument) DocumentLoaderOpts {
+// WithExtraContexts sets the extra contexts for preloading into the underlying storage.
+func WithExtraContexts(contexts ...context.Document) DocumentLoaderOpts {
 	return func(opts *documentLoaderOpts) {
 		opts.extraContexts = contexts
 	}
@@ -161,5 +170,12 @@ func WithExtraContexts(contexts ...ContextDocument) DocumentLoaderOpts {
 func WithRemoteDocumentLoader(loader ld.DocumentLoader) DocumentLoaderOpts {
 	return func(opts *documentLoaderOpts) {
 		opts.remoteDocumentLoader = loader
+	}
+}
+
+// WithContextProvider adds a JSON-LD context provider to the list of providers.
+func WithContextProvider(provider context.Provider) DocumentLoaderOpts {
+	return func(opts *documentLoaderOpts) {
+		opts.contextProviders = append(opts.contextProviders, provider)
 	}
 }

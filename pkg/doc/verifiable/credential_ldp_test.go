@@ -22,7 +22,7 @@ import (
 	"github.com/hyperledger/aries-framework-go/pkg/crypto/primitive/bbs12381g2pub"
 	"github.com/hyperledger/aries-framework-go/pkg/crypto/tinkcrypto"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/jose"
-	jld "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/jsonld"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite"
 	"github.com/hyperledger/aries-framework-go/pkg/doc/signature/suite/bbsblssignature2020"
@@ -222,7 +222,7 @@ func TestParseCredentialFromLinkedDataProof_JSONLD_Validation(t *testing.T) {
 }
 `
 
-		docLoader := createTestDocumentLoader(t, jld.ContextDocument{
+		docLoader := createTestDocumentLoader(t, context.Document{
 			URL:     "http://localhost:9191/example.jsonld",
 			Content: []byte(localJSONLDContext),
 		})
@@ -434,7 +434,7 @@ func TestExtraContextWithLDP(t *testing.T) {
     }
 }
 `
-	loader := createTestDocumentLoader(t, jld.ContextDocument{
+	loader := createTestDocumentLoader(t, context.Document{
 		URL:     "http://localhost:8652/dummy.jsonld",
 		Content: []byte(dummyContext),
 	})
@@ -750,7 +750,7 @@ func TestParseCredential_JSONLiteralsNotSupported(t *testing.T) {
 }
 `
 
-	docLoader := createTestDocumentLoader(t, jld.ContextDocument{
+	docLoader := createTestDocumentLoader(t, context.Document{
 		URL:     "http://127.0.0.1:53401/cmtr.jsonld",
 		Content: []byte(cmtrJSONLD),
 	})
